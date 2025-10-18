@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syed Mohammad Ali Sajjad — Portfolio</title>
+    <meta name="description" content="Syed Mohammad Ali Sajjad | Computer Science Student — HTML, CSS, JS, Flask, Django, Docker, CI/CD, Python, Java, C, Flutter" />
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom CSS variables for theme management */
+        :root {
+            --bg-light: #f8f9fa;
+            --card-light: #ffffff;
+            --text-light: #212529;
+            --muted-light: #6c757d;
+            --accent-light: #f59e0b; /* Amber 500 */
+            --accent-dark-light: #d97706; /* Amber 600 */
+
+            --bg-dark: #111827;
+            --card-dark: #1f2937;
+            --text-dark: #f9fafb;
+            --muted-dark: #9ca3af;
+            --accent-dark: #fbbf24; /* Amber 400 */
+            --accent-dark-dark: #f59e0b; /* Amber 500 */
+        }
+        
+        /* Applying theme variables using data attribute */
+        [data-theme="light"] {
+            --bg-color: var(--bg-light);
+            --card-color: var(--card-light);
+            --text-color: var(--text-light);
+            --muted-color: var(--muted-light);
+            --accent-color: var(--accent-light);
+            --accent-dark-color: var(--accent-dark-light);
+        }
+        
+        [data-theme="dark"] {
+            --bg-color: var(--bg-dark);
+            --card-color: var(--card-dark);
+            --text-color: var(--text-dark);
+            --muted-color: var(--muted-dark);
+            --accent-color: var(--accent-dark);
+            --accent-dark-color: var(--accent-dark-dark);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Additional custom styles */
+        .card {
+            background-color: var(--card-color);
+            transition: background-color 0.3s ease;
+        }
+
+        .accent-text { color: var(--accent-color); }
+        .accent-bg { background-color: var(--accent-color); }
+        .accent-bg-hover:hover { background-color: var(--accent-dark-color); }
+        .muted-text { color: var(--muted-color); }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body data-theme="light" class="antialiased">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 backdrop-blur-lg bg-opacity-80" style="background-color: rgba(248, 249, 250, 0.8);">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <nav class="flex items-center justify-between h-16">
+                <!-- Brand Logo and Name -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 flex items-center justify-center rounded-lg font-bold text-white text-lg accent-bg">
+                        SA
+                    </div>
+                    <div>
+                        <h1 class="text-base font-bold tracking-tight">Syed Mohammad Ali Sajjad</h1>
+                        <p class="text-xs muted-text">Computer Science Student</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Links and Theme Toggle -->
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex items-center space-x-1">
+                        <a href="#home" class="px-3 py-2 text-sm font-medium rounded-md transition-colors hover:accent-text">Home</a>
+                        <a href="#about" class="px-3 py-2 text-sm font-medium muted-text rounded-md transition-colors hover:accent-text">About</a>
+                        <a href="#projects" class="px-3 py-2 text-sm font-medium muted-text rounded-md transition-colors hover:accent-text">Projects</a>
+                        <a href="#contact" class="px-3 py-2 text-sm font-medium muted-text rounded-md transition-colors hover:accent-text">Contact</a>
+                    </div>
+                    
+                    <!-- Theme Toggle -->
+                    <div class="flex items-center p-1 rounded-full bg-gray-200 dark:bg-gray-700">
+                        <button id="lightBtn" class="p-1.5 rounded-full" title="Switch to Light Theme">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 14.95a1 1 0 010-1.414l.707-.707a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414 0zM3 11a1 1 0 100-2H2a1 1 0 100 2h1z"></path></svg>
+                        </button>
+                        <button id="darkBtn" class="p-1.5 rounded-full" title="Switch to Dark Theme">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <!-- Hero Section -->
+         
+        <section id="home" class="card rounded-2xl shadow-lg p-6 md:p-8 grid md:grid-cols-3 gap-6 md:gap-8 items-center fade-in">
+            <div class="md:col-span-1 flex flex-col items-center">
+                <div class="w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden shadow-md border-4 border-white dark:border-gray-800">
+                    
+                    <img src="WhatsApp Image 2025-10-18 at 23.10.27_06c35d02.jpg" alt="Portrait of Syed Mohammad Ali Sajjad" class="w-full h-full object-cover">
+                </div>
+                <div class="text-sm muted-text mt-3 text-center">Based in Prayagraj, India</div>
+            </div>
+            <div class="md:col-span-2 text-center md:text-left">
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight">
+                    Hi, I'm <span class="accent-text">Syed Mohammad Ali Sajjad</span>
+                </h2>
+                <p class="mt-4 text-lg muted-text">
+                    A passionate and self-driven developer with a strong foundation in computer science and hands-on experience across multiple technologies. I love solving real-world problems and building impactful applications.
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3 justify-center md:justify-start">
+                    <a href="#projects" class="accent-bg accent-bg-hover text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                        View Projects
+                    </a>
+                    <a href="https://www.linkedin.com/in/syed-mohammad-ali-sajjad-b330022a8/" target="_blank" rel="noopener noreferrer" class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 font-semibold px-5 py-2.5 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                        LinkedIn
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Grid -->
+        <div class="grid lg:grid-cols-3 gap-6 md:gap-8 mt-6 md:mt-8">
+            <!-- Left Column -->
+            <div class="lg:col-span-2 space-y-6 md:space-y-8">
+                <!-- About Me -->
+                <section id="about" class="card rounded-2xl shadow-lg p-6 fade-in" style="animation-delay: 100ms;">
+                    <h3 class="text-xl font-bold">About Me</h3>
+                    <p class="mt-3 muted-text">
+                        I focus on building dependable software and mobile apps. I enjoy learning from open-source, solving algorithmic problems, and bringing ideas to life using web and mobile technologies. I am comfortable working on both frontend and backend stacks, and I prefer clean, maintainable code with good practices like testing, CI/CD, and containerization.
+                    </p>
+                </section>
+                
+                <!-- Projects -->
+                <section id="projects" class="card rounded-2xl shadow-lg p-6 fade-in" style="animation-delay: 200ms;">
+                    <h3 class="text-xl font-bold">Projects</h3>
+                    <div class="mt-4 space-y-4">
+                        <!-- Project Item -->
+                        <div class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <div>
+                                <h4 class="font-semibold">Personal Portfolio</h4>
+                                <p class="text-sm muted-text">HTML • CSS • JavaScript</p>
+                            </div>
+                            <a href="#" class="text-sm font-semibold accent-text">View</a>
+                        </div>
+                         <!-- Project Item -->
+                        <div class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <div>
+                                <h4 class="font-semibold">Blog / CMS (Demo)</h4>
+                                <p class="text-sm muted-text">Django • SQLite</p>
+                            </div>
+                            <a href="#" class="text-sm font-semibold accent-text">View</a>
+                        </div>
+                         <!-- Project Item -->
+                        <div class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <div>
+                                <h4 class="font-semibold">API / Microservice</h4>
+                                <p class="text-sm muted-text">Flask • Docker • CI/CD</p>
+                            </div>
+                            <a href="#" class="text-sm font-semibold accent-text">View</a>
+                        </div>
+                         <!-- Project Item -->
+                        <div class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <div>
+                                <h4 class="font-semibold">Cross-Platform Mobile App</h4>
+                                <p class="text-sm muted-text">Flutter • Firebase</p>
+                            </div>
+                            <a href="#" class="text-sm font-semibold accent-text">View</a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="space-y-6 md:space-y-8">
+                <!-- Skills & Tools -->
+                <section class="card rounded-2xl shadow-lg p-6 fade-in" style="animation-delay: 300ms;">
+                    <h3 class="text-xl font-bold">Skills & Tools</h3>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-1 rounded-full">HTML</span>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-1 rounded-full">CSS</span>
+                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full">JavaScript</span>
+                        <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-1 rounded-full">Python</span>
+                        <span class="bg-gray-200 text-gray-800 text-xs font-medium px-2.5 py-1 rounded-full">Flask</span>
+                        <span class="bg-green-200 text-green-900 text-xs font-medium px-2.5 py-1 rounded-full">Django</span>
+                        <span class="bg-blue-200 text-blue-900 text-xs font-medium px-2.5 py-1 rounded-full">Docker</span>
+                        <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full">CI/CD</span>
+                        <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-1 rounded-full">Flutter</span>
+                    </div>
+                </section>
+
+                <!-- Contact -->
+                <section id="contact" class="card rounded-2xl shadow-lg p-6 fade-in" style="animation-delay: 400ms;">
+                    <h3 class="text-xl font-bold">Contact</h3>
+                     <ul class="mt-3 space-y-2 muted-text text-sm">
+                        <li class="flex items-center gap-2">
+                            <svg class="w-4 h-4 accent-text" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
+                            <a href="mailto:alisyed19615@gmail.com" class="hover:underline">alisyed19615@gmail.com</a>
+                        </li>
+                         <li class="flex items-center gap-2">
+                            <svg class="w-4 h-4 accent-text" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.206v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" clip-rule="evenodd"></path></svg>
+                            <a href="https://www.linkedin.com/in/syed-mohammad-ali-sajjad-b330022a8/" target="_blank" rel="noopener noreferrer" class="hover:underline">LinkedIn Profile</a>
+                        </li>
+                         <li class="flex items-center gap-2">
+                            <svg class="w-4 h-4 accent-text" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 0C4.477 0 0 4.477 0 10c0 4.418 2.865 8.165 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.338 4.695-4.566 4.943.359.308.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0020 10c0-5.523-4.477-10-10-10z" clip-rule="evenodd"></path></svg>
+                            <a href="https://github.com/alisyed19615-maker" target="_blank" rel="noopener noreferrer" class="hover:underline">GitHub Profile</a>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center mt-12 py-6 border-t border-gray-200 dark:border-gray-700">
+            <p class="text-sm muted-text">
+                &copy; 2025 Syed Mohammad Ali Sajjad. All Rights Reserved.
+            </p>
+        </footer>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const lightBtn = document.getElementById('lightBtn');
+            const darkBtn = document.getElementById('darkBtn');
+            const body = document.body;
+            
+            const lightBtnActiveClasses = ['bg-white', 'text-yellow-500', 'shadow-sm'];
+            const darkBtnActiveClasses = ['bg-gray-900', 'text-yellow-400', 'shadow-sm'];
+            const inactiveClasses = ['text-gray-500', 'dark:text-gray-400'];
+
+            function applyTheme(theme) {
+                body.setAttribute('data-theme', theme);
+                if (theme === 'dark') {
+                    darkBtn.classList.add(...darkBtnActiveClasses);
+                    darkBtn.classList.remove(...inactiveClasses);
+                    lightBtn.classList.remove(...lightBtnActiveClasses);
+                    lightBtn.classList.add(...inactiveClasses);
+                } else {
+                    lightBtn.classList.add(...lightBtnActiveClasses);
+                    lightBtn.classList.remove(...inactiveClasses);
+                    darkBtn.classList.remove(...darkBtnActiveClasses);
+                    darkBtn.classList.add(...inactiveClasses);
+                }
+            }
+
+            function setTheme(theme) {
+                applyTheme(theme);
+                try { localStorage.setItem('portfolio-theme', theme); } catch(e) {}
+            }
+
+            lightBtn.addEventListener('click', () => setTheme('light'));
+            darkBtn.addEventListener('click', () => setTheme('dark'));
+
+            // Load saved theme or use system preference
+            let savedTheme;
+            try {
+                savedTheme = localStorage.getItem('portfolio-theme');
+            } catch(e) {}
+            
+            const preferredTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            applyTheme(preferredTheme);
+
+            // Staggered fade-in animations
+            const animatedElements = document.querySelectorAll('.fade-in');
+            animatedElements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 100}ms`;
+            });
+        });
+    </script>
+</body>
+</html>
+
