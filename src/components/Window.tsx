@@ -65,6 +65,21 @@ export default function Window({
     e.preventDefault();
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (isMaximized) return;
+    onFocus();
+    setIsDragging(true);
+    if (e.touches.length > 0) {
+      const touch = e.touches[0];
+      dragStart.current = {
+        x: touch.clientX,
+        y: touch.clientY,
+        posX: position.x,
+        posY: position.y,
+      };
+    }
+  };
+
   // Resize handlers
   const handleResizeStart = (e: React.MouseEvent) => {
     onFocus();
@@ -76,6 +91,21 @@ export default function Window({
       height: size.height,
     };
     e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleTouchResizeStart = (e: React.TouchEvent) => {
+    onFocus();
+    setIsResizing(true);
+    if (e.touches.length > 0) {
+      const touch = e.touches[0];
+      resizeStart.current = {
+        x: touch.clientX,
+        y: touch.clientY,
+        width: size.width,
+        height: size.height,
+      };
+    }
     e.stopPropagation();
   };
 
@@ -103,19 +133,48 @@ export default function Window({
       }
     };
 
-    const handleMouseUp = () => {
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 0) return;
+      const touch = e.touches[0];
+      
+      if (isDragging) {
+        const dx = touch.clientX - dragStart.current.x;
+        const dy = touch.clientY - dragStart.current.y;
+        
+        const newX = Math.max(0, Math.min(window.innerWidth - 100, dragStart.current.posX + dx));
+        const newY = Math.max(0, Math.min(window.innerHeight - 40, dragStart.current.posY + dy));
+        
+        setPosition({ x: newX, y: newY });
+      }
+      
+      if (isResizing) {
+        const dx = touch.clientX - resizeStart.current.x;
+        const dy = touch.clientY - resizeStart.current.y;
+        
+        const newWidth = Math.max(300, resizeStart.current.width + dx);
+        const newHeight = Math.max(200, resizeStart.current.height + dy);
+        
+        setSize({ width: newWidth, height: newHeight });
+      }
+    };
+
+    const handleDragEnd = () => {
       setIsDragging(false);
       setIsResizing(false);
     };
 
     if (isDragging || isResizing) {
       document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
+      document.addEventListener('mouseup', handleDragEnd);
+      document.addEventListener('touchmove', handleTouchMove, { passive: true });
+      document.addEventListener('touchend', handleDragEnd);
     }
 
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('mouseup', handleDragEnd);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleDragEnd);
     };
   }, [isDragging, isResizing]);
 
@@ -125,7 +184,9 @@ export default function Window({
     <div
       ref={windowRef}
       onMouseDown={handleMouseDown}
-      className={`absolute flex flex-col rounded-xl border bg-[#0a0a16]/85 backdrop-blur-xl transition-all duration-75 overflow-hidden window-open-animate ${
+      className={`absolute flex flex-col rounded-xl border bg-[#0a0a16]/85 backdrop-blur-xl ${
+        isDragging || isResizing ? 'transition-none' : 'transition-all duration-300 ease-out'
+      } overflow-hidden window-open-animate ${
         isMaximized 
           ? 'left-0 top-12 w-full h-[calc(100vh-80px)] rounded-none border-none' 
           : ''
@@ -147,6 +208,7 @@ export default function Window({
         className="h-10 bg-[#05050e]/95 px-4 flex items-center justify-between cursor-move select-none border-b"
         style={{ borderBottomColor: themeColor ? `${themeColor}15` : 'rgba(139, 92, 246, 0.1)' }}
         onMouseDown={handleDragStart}
+        onTouchStart={handleTouchStart}
         onDoubleClick={() => {
           playSwoosh();
           setIsMaximized(!isMaximized);
@@ -209,6 +271,7 @@ export default function Window({
       {!isMaximized && (
         <div
           onMouseDown={handleResizeStart}
+          onTouchStart={handleTouchResizeStart}
           className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize flex items-end justify-end p-0.5 pointer-events-auto"
         >
           <svg width="8" height="8" viewBox="0 0 8 8" className="text-slate-500 opacity-60">

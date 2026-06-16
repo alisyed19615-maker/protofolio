@@ -366,6 +366,7 @@ export default function MobileDesktop() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, padding: '0 8px' }}>
           {APPS.map(app => (
             <button key={app.id} onClick={() => setOpenApp(app.id)}
+              className="mobile-app-btn"
               style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0' }}>
               <div style={{
                 width: 64, height: 64, borderRadius: 18,
@@ -374,7 +375,6 @@ export default function MobileDesktop() {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: 28,
                 boxShadow: `0 4px 20px ${app.color}20`,
-                transition: 'transform 0.15s',
               }}>
                 {app.icon}
               </div>
@@ -399,6 +399,7 @@ export default function MobileDesktop() {
           const app = appForId(id)!;
           return (
             <button key={id} onClick={() => setOpenApp(id)}
+              className="dock-app-btn"
               style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, background: 'none', border: 'none', cursor: 'pointer' }}>
               <div style={{
                 width: 52, height: 52, borderRadius: 14,
@@ -433,6 +434,7 @@ export default function MobileDesktop() {
             flexShrink: 0,
           }}>
             <button onClick={() => setOpenApp(null)}
+              className="mobile-app-btn"
               style={{ background: 'rgba(255,255,255,0.08)', border: 'none', color: '#fff', borderRadius: 10, padding: '8px 14px', fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>
               ‹ Back
             </button>
@@ -454,6 +456,18 @@ export default function MobileDesktop() {
         @keyframes slideUp {
           from { transform: translateY(100%); opacity: 0; }
           to   { transform: translateY(0);    opacity: 1; }
+        }
+        .mobile-app-btn {
+          transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .mobile-app-btn:active {
+          transform: scale(0.92);
+        }
+        .dock-app-btn {
+          transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .dock-app-btn:active {
+          transform: scale(0.85);
         }
         * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
         body { overflow: hidden; }
