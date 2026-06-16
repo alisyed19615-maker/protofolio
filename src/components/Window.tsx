@@ -184,8 +184,10 @@ export default function Window({
     <div
       ref={windowRef}
       onMouseDown={handleMouseDown}
-      className={`absolute flex flex-col rounded-xl border bg-[#0a0a16]/85 backdrop-blur-xl ${
-        isDragging || isResizing ? 'transition-none' : 'transition-all duration-300 ease-out'
+      className={`absolute flex flex-col rounded-xl border ${
+        isDragging || isResizing 
+          ? 'bg-[#06060f]/98 backdrop-blur-none transition-none' 
+          : 'bg-[#0a0a16]/85 backdrop-blur-xl transition-all duration-300 ease-out'
       } overflow-hidden window-open-animate ${
         isMaximized 
           ? 'left-0 top-12 w-full h-[calc(100vh-80px)] rounded-none border-none' 
@@ -198,9 +200,11 @@ export default function Window({
         width: isMaximized ? '100%' : `${size.width}px`,
         height: isMaximized ? 'calc(100vh - 80px)' : `${size.height}px`,
         borderColor: themeColor ? `${themeColor}35` : 'rgba(139, 92, 246, 0.25)',
-        boxShadow: themeColor 
-          ? `0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 25px -4px ${themeColor}20, 0 0 1px 1px rgba(255, 255, 255, 0.05) inset` 
-          : `0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.05) inset`
+        boxShadow: isDragging || isResizing
+          ? '0 4px 14px rgba(0, 0, 0, 0.6)'
+          : (themeColor 
+              ? `0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 25px -4px ${themeColor}20, 0 0 1px 1px rgba(255, 255, 255, 0.05) inset` 
+              : `0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.05) inset`)
       }}
     >
       {/* Linux GNOME / Ubuntu style Titlebar */}
