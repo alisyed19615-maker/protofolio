@@ -1,0 +1,221 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-geist-sans), sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+}
+
+:root {
+  --background: #0a0a14;
+  --foreground: #f8f8f2;
+}
+
+body {
+  background-color: #03030b;
+  color: #f8f8f2;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+}
+
+/* Custom scrollbars for modern code themes */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(10, 10, 20, 0.5);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.6);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Futuristic Tech Grid Backdrop */
+.grid-bg {
+  background-size: 50px 50px;
+  background-image: 
+    linear-gradient(to right, rgba(139, 92, 246, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
+}
+
+/* Ambient Floating Blobs */
+@keyframes float {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+.blob {
+  position: absolute;
+  filter: blur(100px);
+  opacity: 0.25;
+  z-index: 0;
+  animation: float 14s infinite ease-in-out;
+  border-radius: 50%;
+}
+
+.blob-purple {
+  top: 10%;
+  left: 10%;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%);
+}
+
+.blob-cyan {
+  bottom: 15%;
+  right: 10%;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(6,182,212,0.2) 0%, transparent 70%);
+}
+
+.blob-magenta {
+  top: 40%;
+  left: 45%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(236,72,153,0.15) 0%, transparent 70%);
+}
+
+/* Glassmorphism */
+.glass-panel {
+  background: rgba(13, 13, 27, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(139, 92, 246, 0.12);
+}
+
+/* Neon Glows */
+.shadow-neon-purple {
+  box-shadow: 0 0 25px -5px rgba(139, 92, 246, 0.25);
+}
+
+.shadow-neon-cyan {
+  box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.25);
+}
+
+.shadow-neon-glow {
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 
+              0 0 1px 1px rgba(255, 255, 255, 0.05) inset;
+}
+
+/* Tokyo Night Terminal Colors */
+.terminal-cyan { color: #89ddff; }
+.terminal-purple { color: #bb9af7; }
+.terminal-green { color: #9ece6a; }
+.terminal-yellow { color: #e0af68; }
+.terminal-red { color: #f7768e; }
+.terminal-blue { color: #7aa2f7; }
+.terminal-comment { color: #565f89; }
+.terminal-foreground { color: #a9b1d6; }
+
+/* CRT Scanlines Overlay */
+.crt-screen::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+  z-index: 100000;
+  background-size: 100% 4px;
+  pointer-events: none;
+}
+
+/* Phosphor Glow Flicker */
+@keyframes crtflicker {
+  0% { opacity: 0.99; }
+  50% { opacity: 1; }
+  100% { opacity: 0.99; }
+}
+
+.crt-flicker {
+  animation: crtflicker 0.25s infinite;
+}
+
+/* Custom terminal prompt styling */
+.prompt-arrow {
+  clip-path: polygon(0% 0%, 85% 0%, 100% 50%, 85% 100%, 0% 100%);
+}
+
+/* Modern Window Scale & Fade Animation */
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95) translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.window-open-animate {
+  animation: scaleIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform-origin: center center;
+}
+
+/* Right-click Context Menu */
+.context-menu-glass {
+  background: rgba(10, 10, 24, 0.85);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.6);
+}
+
+/* Sliding Widget Panel */
+.widget-panel-glass {
+  background: rgba(8, 8, 18, 0.8);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-left: 1px solid rgba(139, 92, 246, 0.15);
+  box-shadow: -10px 0 40px -10px rgba(0, 0, 0, 0.6);
+}
+
+/* Pulsing Dock Dot */
+@keyframes dockPulse {
+  0%, 100% { transform: scale(1) translateX(-50%); opacity: 0.6; }
+  50% { transform: scale(1.3) translateX(-38%); opacity: 1; }
+}
+
+.dock-pulse-dot {
+  animation: dockPulse 2s infinite ease-in-out;
+}
+
+/* Neon Glow Theme Accent Styles */
+.neon-glow-green {
+  box-shadow: 0 0 25px -4px rgba(74, 246, 38, 0.25);
+  border-color: rgba(74, 246, 38, 0.2);
+}
+.neon-glow-cyan {
+  box-shadow: 0 0 25px -4px rgba(6, 182, 212, 0.25);
+  border-color: rgba(6, 182, 212, 0.2);
+}
+.neon-glow-amber {
+  box-shadow: 0 0 25px -4px rgba(255, 176, 0, 0.25);
+  border-color: rgba(255, 176, 0, 0.2);
+}
+.neon-glow-purple {
+  box-shadow: 0 0 25px -4px rgba(139, 92, 246, 0.25);
+  border-color: rgba(139, 92, 246, 0.2);
+}
+.neon-glow-magenta {
+  box-shadow: 0 0 25px -4px rgba(236, 72, 153, 0.25);
+  border-color: rgba(236, 72, 153, 0.2);
+}
+
