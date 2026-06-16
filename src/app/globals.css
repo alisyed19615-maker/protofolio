@@ -130,21 +130,30 @@ body {
   display: block;
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.12) 50%);
   z-index: 100000;
   background-size: 100% 4px;
   pointer-events: none;
+  will-change: transform;
 }
 
 /* Phosphor Glow Flicker */
 @keyframes crtflicker {
-  0% { opacity: 0.99; }
-  50% { opacity: 1; }
-  100% { opacity: 0.99; }
+  0% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+  100% { opacity: 0.3; }
 }
 
-.crt-flicker {
-  animation: crtflicker 0.25s infinite;
+.crt-flicker::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: rgba(18, 16, 16, 0.03);
+  z-index: 100001;
+  pointer-events: none;
+  animation: crtflicker 0.15s infinite;
+  will-change: opacity;
 }
 
 /* Custom terminal prompt styling */

@@ -140,6 +140,21 @@ export default function Desktop({ onSwitchToTerminal }: { onSwitchToTerminal: ()
     };
     window.addEventListener('resize', handleResize);
 
+    // Parse theme color to rgb once
+    const parseHexToRgb = (hexStr: string) => {
+      const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+      const hex = hexStr.replace(shorthandRegex, (_, r, g, b) => r + r + g + g + b + b);
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : { r: 0, g: 240, b: 255 };
+    };
+
+    const rgb = parseHexToRgb(themeColor);
+    const nodeFill = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.38)`;
+
     // Particles array
     const particleCount = 45;
     const particles: Array<{
@@ -186,7 +201,7 @@ export default function Desktop({ onSwitchToTerminal }: { onSwitchToTerminal: ()
         if (p.y < 0 || p.y > height) p.vy *= -1;
 
         // Draw node
-        ctx.fillStyle = themeColor + '60';
+        ctx.fillStyle = nodeFill;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fill();
@@ -197,7 +212,7 @@ export default function Desktop({ onSwitchToTerminal }: { onSwitchToTerminal: ()
           const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
           if (dist < 120) {
             const alpha = (1 - dist / 120) * 0.15;
-            ctx.strokeStyle = themeColor + Math.floor(alpha * 255).toString(16).padStart(2, '0');
+            ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
             ctx.lineWidth = 0.8;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
@@ -211,7 +226,7 @@ export default function Desktop({ onSwitchToTerminal }: { onSwitchToTerminal: ()
           const mouseDist = Math.hypot(p.x - mouse.x, p.y - mouse.y);
           if (mouseDist < 180) {
             const alpha = (1 - mouseDist / 180) * 0.25;
-            ctx.strokeStyle = themeColor + Math.floor(alpha * 255).toString(16).padStart(2, '0');
+            ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
             ctx.lineWidth = 1.0;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
