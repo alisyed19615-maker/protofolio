@@ -210,7 +210,7 @@ export default function Window({
       {/* Linux GNOME / Ubuntu style Titlebar */}
       <div
         className="h-10 bg-[#05050e]/95 px-4 flex items-center justify-between cursor-move select-none border-b"
-        style={{ borderBottomColor: themeColor ? `${themeColor}15` : 'rgba(139, 92, 246, 0.1)' }}
+        style={{ borderBottomColor: themeColor ? `${themeColor}15` : 'rgba(139, 92, 246, 0.1)', WebkitUserSelect: 'none', userSelect: 'none', touchAction: 'none' }}
         onMouseDown={handleDragStart}
         onTouchStart={handleTouchStart}
         onDoubleClick={() => {

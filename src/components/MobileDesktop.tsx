@@ -76,6 +76,14 @@ export default function MobileDesktop() {
   const termBottomRef               = useRef<HTMLDivElement>(null);
   const inputRef                    = useRef<HTMLInputElement>(null);
 
+  // Contact form state
+  const [contactName, setContactName]     = useState('');
+  const [contactEmail, setContactEmail]   = useState('');
+  const [contactMsg, setContactMsg]       = useState('');
+  const [contactSending, setContactSending] = useState(false);
+  const [contactSent, setContactSent]     = useState(false);
+  const [contactError, setContactError]   = useState('');
+
   // Clock
   useEffect(() => {
     const tick = () => {
@@ -139,6 +147,44 @@ export default function MobileDesktop() {
       ...(result ? [{ type: 'output' as const, content: result }] : []),
     ]);
     setTermInput('');
+    // Re-focus the input after running a command
+    setTimeout(() => inputRef.current?.focus(), 100);
+  };
+
+  // Contact form submission via Web3Forms
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!contactEmail || !contactMsg) return;
+    setContactSending(true);
+    setContactError('');
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          access_key: 'd6371389-5357-4208-a99a-3c498e3f7c4a',
+          name: contactName || 'Anonymous Visitor',
+          email: contactEmail,
+          message: contactMsg,
+          from_name: 'AliOS Portfolio (Mobile)',
+          subject: `Portfolio Contact from ${contactName || contactEmail}`,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setContactSending(false);
+        setContactSent(true);
+        setContactName('');
+        setContactEmail('');
+        setContactMsg('');
+        setTimeout(() => setContactSent(false), 6000);
+      } else {
+        throw new Error(data.message || 'Submission failed');
+      }
+    } catch (err: unknown) {
+      setContactSending(false);
+      setContactError(err instanceof Error ? err.message : 'Network error');
+    }
   };
 
   const appForId = (id: string) => APPS.find(a => a.id === id);
@@ -253,19 +299,80 @@ export default function MobileDesktop() {
 
       case 'contact':
         return (
-          <div style={{ padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center', textAlign: 'center' }}>
-            <div>
+          <div style={{ padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div style={{ textAlign: 'center' }}>
               <h3 style={{ fontSize: 20, fontWeight: 800, color: '#fff', margin: '0 0 8px' }}>Let's Connect!</h3>
               <p style={{ fontSize: 13, color: '#64748b', margin: 0 }}>I'm open to new opportunities — let's build something great.</p>
             </div>
-            <a href="mailto:alisyed19615@gmail.com"
-              style={{ width: '100%', maxWidth: 320, padding: '14px 24px', background: '#ef4444', color: '#fff', borderRadius: 14, fontSize: 15, fontWeight: 700, textDecoration: 'none', display: 'block' }}>
-              📧 alisyed19615@gmail.com
-            </a>
-            <a href="https://github.com/alisyed19615-maker" target="_blank" rel="noreferrer"
-              style={{ width: '100%', maxWidth: 320, padding: '14px 24px', background: 'rgba(255,255,255,0.06)', color: '#e2e8f0', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 14, fontSize: 15, fontWeight: 700, textDecoration: 'none', display: 'block' }}>
-              🐙 github.com/alisyed19615-maker
-            </a>
+
+            {contactSent ? (
+              <div style={{ padding: 24, background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: 14, textAlign: 'center' }}>
+                <span style={{ fontSize: 28, display: 'block', marginBottom: 8 }}>🎉</span>
+                <h4 style={{ fontSize: 16, fontWeight: 700, color: '#fff', margin: '0 0 6px' }}>Message Sent!</h4>
+                <p style={{ fontSize: 12, color: '#64748b', margin: 0 }}>Ali Sajjad will get back to you soon.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleContactSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                <div>
+                  <label style={{ fontSize: 11, color: '#64748b', fontWeight: 700, letterSpacing: '0.05em', display: 'block', marginBottom: 6 }}>YOUR NAME</label>
+                  <input
+                    type="text"
+                    value={contactName}
+                    onChange={e => setContactName(e.target.value)}
+                    placeholder="John Doe"
+                    style={{ width: '100%', padding: '12px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, color: '#fff', fontSize: 14, outline: 'none', fontFamily: 'monospace', userSelect: 'text', WebkitUserSelect: 'text' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ fontSize: 11, color: '#64748b', fontWeight: 700, letterSpacing: '0.05em', display: 'block', marginBottom: 6 }}>YOUR EMAIL *</label>
+                  <input
+                    type="email"
+                    value={contactEmail}
+                    onChange={e => setContactEmail(e.target.value)}
+                    placeholder="name@domain.com"
+                    required
+                    style={{ width: '100%', padding: '12px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, color: '#fff', fontSize: 14, outline: 'none', fontFamily: 'monospace', userSelect: 'text', WebkitUserSelect: 'text' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ fontSize: 11, color: '#64748b', fontWeight: 700, letterSpacing: '0.05em', display: 'block', marginBottom: 6 }}>YOUR MESSAGE *</label>
+                  <textarea
+                    rows={4}
+                    value={contactMsg}
+                    onChange={e => setContactMsg(e.target.value)}
+                    placeholder="Type your message here..."
+                    required
+                    style={{ width: '100%', padding: '12px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, color: '#fff', fontSize: 14, outline: 'none', fontFamily: 'monospace', resize: 'none', userSelect: 'text', WebkitUserSelect: 'text' }}
+                  />
+                </div>
+
+                {contactError && (
+                  <div style={{ fontSize: 12, color: '#f87171', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 10, padding: '10px 14px' }}>
+                    ⚠ {contactError}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={contactSending}
+                  style={{ width: '100%', padding: '14px 24px', background: contactSending ? '#64748b' : '#ef4444', color: '#fff', borderRadius: 14, fontSize: 15, fontWeight: 700, border: 'none', cursor: 'pointer', opacity: contactSending ? 0.7 : 1 }}
+                >
+                  {contactSending ? '📡 Sending...' : '📨 Send Message'}
+                </button>
+              </form>
+            )}
+
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <span style={{ fontSize: 11, color: '#475569', fontWeight: 700, letterSpacing: '0.05em' }}>OR CONNECT DIRECTLY</span>
+              <a href="mailto:alisyed19615@gmail.com"
+                style={{ width: '100%', padding: '12px 20px', background: 'rgba(255,255,255,0.06)', color: '#e2e8f0', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 14, fontSize: 14, fontWeight: 600, textDecoration: 'none', display: 'block', textAlign: 'center' }}>
+                📧 alisyed19615@gmail.com
+              </a>
+              <a href="https://github.com/alisyed19615-maker" target="_blank" rel="noreferrer"
+                style={{ width: '100%', padding: '12px 20px', background: 'rgba(255,255,255,0.06)', color: '#e2e8f0', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 14, fontSize: 14, fontWeight: 600, textDecoration: 'none', display: 'block', textAlign: 'center' }}>
+                🐙 github.com/alisyed19615-maker
+              </a>
+            </div>
           </div>
         );
 
@@ -273,7 +380,10 @@ export default function MobileDesktop() {
         return (
           <div style={{ display: 'flex', flexDirection: 'column', height: '100%', fontFamily: 'monospace' }}>
             {/* Output */}
-            <div style={{ flex: 1, overflowY: 'auto', padding: '16px 14px', background: '#0a0a14', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div
+              onClick={() => inputRef.current?.focus()}
+              style={{ flex: 1, overflowY: 'auto', padding: '16px 14px', background: '#0a0a14', display: 'flex', flexDirection: 'column', gap: 8, userSelect: 'text', WebkitUserSelect: 'text' as const }}
+            >
               {termLines.map((line, i) => (
                 <div key={i}>
                   {line.type === 'input' ? (
@@ -308,7 +418,8 @@ export default function MobileDesktop() {
                 onChange={e => setTermInput(e.target.value)}
                 onKeyDown={e => { if (e.key === 'Enter') { runCmd(termInput); } }}
                 placeholder="type a command..."
-                style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#fff', fontSize: 13, fontFamily: 'monospace' }}
+                autoFocus
+                style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#fff', fontSize: 14, fontFamily: 'monospace', userSelect: 'text', WebkitUserSelect: 'text' as const }}
                 spellCheck={false}
                 autoComplete="off"
                 autoCorrect="off"
@@ -471,6 +582,7 @@ export default function MobileDesktop() {
         }
         * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
         body { overflow: hidden; }
+        input, textarea { -webkit-user-select: text !important; user-select: text !important; }
       `}</style>
     </div>
   );

@@ -88,10 +88,12 @@ export default function Desktop({ onSwitchToTerminal }: { onSwitchToTerminal: ()
   const [hoveredDockId, setHoveredDockId] = useState<string | null>(null);
 
   // Form states for contact window
+  const [contactName, setContactName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formSending, setFormSending] = useState(false);
+  const [formError, setFormError] = useState('');
 
   // Custom checklist state for widgets
   const [todos, setTodos] = useState([
@@ -379,8 +381,8 @@ export default function Desktop({ onSwitchToTerminal }: { onSwitchToTerminal: ()
     });
   };
 
-  // Contact form submission simulator
-  const handleContactSubmit = (e: React.FormEvent) => {
+  // Contact form submission via Web3Forms
+  const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !message) {
       playBeep();
@@ -388,14 +390,37 @@ export default function Desktop({ onSwitchToTerminal }: { onSwitchToTerminal: ()
     }
     playClick('enter');
     setFormSending(true);
-    setTimeout(() => {
+    setFormError('');
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          access_key: 'd6371389-5357-4208-a99a-3c498e3f7c4a',
+          name: contactName || 'Anonymous Visitor',
+          email,
+          message,
+          from_name: 'AliOS Portfolio Contact Form',
+          subject: `Portfolio Contact from ${contactName || email}`,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setFormSending(false);
+        setFormSubmitted(true);
+        setContactName('');
+        setEmail('');
+        setMessage('');
+        playNotify();
+        setTimeout(() => setFormSubmitted(false), 6000);
+      } else {
+        throw new Error(data.message || 'Submission failed');
+      }
+    } catch (err: unknown) {
       setFormSending(false);
-      setFormSubmitted(true);
-      setEmail('');
-      setMessage('');
-      playNotify();
-      setTimeout(() => setFormSubmitted(false), 5000);
-    }, 1500);
+      setFormError(err instanceof Error ? err.message : 'Network error — please try again.');
+      playBeep();
+    }
   };
 
   // Window cascade offsets
@@ -1034,6 +1059,17 @@ export default function Desktop({ onSwitchToTerminal }: { onSwitchToTerminal: ()
           ) : (
             <form onSubmit={handleContactSubmit} className="space-y-4">
               <div className="space-y-1">
+                <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Your Name</label>
+                <input 
+                  type="text" 
+                  value={contactName}
+                  onChange={(e) => setContactName(e.target.value)}
+                  placeholder="John Doe"
+                  className="w-full bg-slate-900 border border-slate-800 rounded px-3 py-2 text-white text-[10px] outline-none focus:border-slate-700 font-mono"
+                />
+              </div>
+
+              <div className="space-y-1">
                 <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Your Email</label>
                 <input 
                   type="email" 
@@ -1057,13 +1093,19 @@ export default function Desktop({ onSwitchToTerminal }: { onSwitchToTerminal: ()
                 />
               </div>
 
+              {formError && (
+                <div className="text-[10px] text-red-400 bg-red-950/30 border border-red-900/50 rounded px-3 py-2 font-mono">
+                  ⚠ {formError}
+                </div>
+              )}
+
               <button
                 type="submit"
                 disabled={formSending}
-                className="w-full py-2 bg-slate-800 border border-slate-700 rounded text-white text-[10px] font-semibold hover:bg-slate-700 active:bg-slate-600 transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-2 bg-slate-800 border border-slate-700 rounded text-white text-[10px] font-semibold hover:bg-slate-700 active:bg-slate-600 transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 {formSending ? (
-                  <>Transmitting...</>
+                  <>📡 Transmitting...</>
                 ) : (
                   <>
                     <Send size={11} />
